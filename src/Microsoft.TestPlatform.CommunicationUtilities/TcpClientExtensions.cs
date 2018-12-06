@@ -10,9 +10,6 @@ namespace Microsoft.VisualStudio.TestPlatform.CommunicationUtilities
     using System.Threading;
     using System.Threading.Tasks;
 
-    using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Interfaces;
-    using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-
     internal static class TcpClientExtensions
     {
         // Timeout for polling stream in micro seconds.
@@ -26,11 +23,19 @@ namespace Microsoft.VisualStudio.TestPlatform.CommunicationUtilities
         {
             Exception error = null;
 
-            // var remoteEndPoint = client.Client.RemoteEndPoint.ToString();
-            // var localEndPoint = client.Client.LocalEndPoint.ToString();
             var remoteEndPoint = string.Empty;
             var localEndPoint = string.Empty;
-
+            try
+            {
+                remoteEndPoint = client.Client.RemoteEndPoint.ToString();
+                localEndPoint = client.Client.LocalEndPoint.ToString();
+            }
+            catch (SocketException socketException)
+            {
+                EqtTrace.Error(
+                        "TcpClientExtensions.MessageLoopAsync: failed to access endpoint of the socket {0}",
+                        socketException);
+            }
 
             // Set read timeout to avoid blocking receive raw message
             while (channel != null && !cancellationToken.IsCancellationRequested)
