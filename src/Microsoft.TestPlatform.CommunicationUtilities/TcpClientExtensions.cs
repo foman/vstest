@@ -25,8 +25,12 @@ namespace Microsoft.VisualStudio.TestPlatform.CommunicationUtilities
                 CancellationToken cancellationToken)
         {
             Exception error = null;
-            var remoteEndPoint = client.Client.RemoteEndPoint?.ToString();
-            var localEndPoint = client.Client.LocalEndPoint?.ToString();
+
+            // var remoteEndPoint = client.Client.RemoteEndPoint.ToString();
+            // var localEndPoint = client.Client.LocalEndPoint.ToString();
+            var remoteEndPoint = string.Empty;
+            var localEndPoint = string.Empty;
+
 
             // Set read timeout to avoid blocking receive raw message
             while (channel != null && !cancellationToken.IsCancellationRequested)
